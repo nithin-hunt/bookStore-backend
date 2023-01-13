@@ -60,6 +60,25 @@ router.get("/:id", async(req,res) => {
     }
 })
 
+router.put("/:id", async(req,res) => {
+    try {
+        const book = await Book.findOne({where: {id: req.params.id}});
+        if(!book) {
+            return res.status(400).json("Book doesn't exist");
+        }
+
+        const {name, author, genre, dateOfRelease, bookImage, rating, price} = req.body;
+        await Book.update({name, author, genre, dateOfRelease, bookImage, rating, price},{where: {id: req.params.id}});
+
+        const updatedBook = await Book.findOne({where: {id: req.params.id}});
+        return res.status(200).json(updatedBook);
+
+    } catch(e) {
+        console.log(e);
+        res.status(400).json({error: e});
+    }
+})
+
 router.delete("/:id", async(req,res) => {
     try{
         const book = await Book.destroy({where: {id: req.params.id}});
