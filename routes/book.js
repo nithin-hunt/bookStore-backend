@@ -49,7 +49,6 @@ router.get("/", async(req,res) => {
 router.get("/:id", async(req,res) => {
     try{
         const book = await Book.findOne({where: {id: req.params.id}});
-
         if(!book) {
             return res.status(404).json("No book found");
         }
@@ -61,6 +60,18 @@ router.get("/:id", async(req,res) => {
     }
 })
 
+router.delete("/:id", async(req,res) => {
+    try{
+        const book = await Book.destroy({where: {id: req.params.id}});
+        if(!book) {
+            return res.status(400).json("Book doesn't exist");
+        }
+
+        return res.status(200).json("Book deleted successfully");
+    } catch(e) {
+        res.status(400).json({error: e});
+    }
+})
 
 
 module.exports = router;
