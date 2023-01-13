@@ -33,9 +33,33 @@ router.post("/add", async(req,res) => {
             bookDetails: createdBook
     });
     } catch(e) {
-        return res.status(400).json({err: e});
+        return res.status(400).json({error: e});
     }
 });
+
+router.get("/", async(req,res) => {
+    try {
+        const books = await Book.findAll();
+        return res.status(200).json(books);
+    } catch(e) {
+        res.status(400).json({error: e});
+    }
+});
+
+router.get("/:id", async(req,res) => {
+    try{
+        const book = await Book.findOne({where: {id: req.params.id}});
+
+        if(!book) {
+            return res.status(404).json("No book found");
+        }
+
+        return res.status(200).json(book);
+
+    } catch(e) {
+        res.status(400).json({error: e});
+    }
+})
 
 
 
