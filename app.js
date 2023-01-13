@@ -3,9 +3,14 @@ const app = express();
 
 const {connectDB} = require("./config/db");
 
+const bookRoutes = require("./routes/book");
+
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
+app.use("/api/v1/books", bookRoutes);
 
 const start = async () => {
     try {
